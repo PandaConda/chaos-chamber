@@ -12,13 +12,6 @@ def run():
 	tile_size = Vector(window_size[0] / 32, window_size[1] / 20)
 	screen = pygame.display.set_mode(window_size, DOUBLEBUF)
 
-	stage_left = 3 * tile_size.x
-	stage_top = 3 * tile_size.y
-	stage_width = 26 * tile_size.x
-	stage_height = 14 * tile_size.y
-
-	BLACK = (0, 0, 0)
-
 	gameover = False;
 	clock = pygame.time.Clock()
 
@@ -34,18 +27,36 @@ def run():
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
 				if event.key == K_LEFT:
-					player.moveLeft()
+					player.start_running_left()
 				elif event.key == K_RIGHT:
-					player.moveRight()
+					player.start_running_right()
 				elif event.key == K_f:
 					pygame.display.toggle_fullscreen()
+				elif event.key == K_w:
+					player.start_aiming_up()
+				elif event.key == K_a:
+					player.start_aiming_left()
+				elif event.key == K_s:
+					player.start_aiming_down()
+				elif event.key == K_d:
+					player.start_aiming_right()
 				elif event.key == K_ESCAPE:
 					gameover = True
 			elif event.type == pygame.KEYUP:
 				if event.key == K_LEFT:
-					player.stopMoving()
+					player.stop_running_left()
 				elif event.key == K_RIGHT:
-					player.stopMoving()
+					player.stop_running_right()
+				elif event.key == K_w:
+					player.stop_aiming_up()
+				elif event.key == K_a:
+					player.stop_aiming_left()
+				elif event.key == K_s:
+					player.stop_aiming_down()
+				elif event.key == K_d:
+					player.stop_aiming_right()
+			elif event.type == pygame.QUIT:
+				gameover = True
 		
 		# update
 		player.update()
@@ -54,6 +65,4 @@ def run():
 
 		screen.blit(background, (0, 0));
 		player.render(screen)
-#pygame.draw.rect(screen, (255, 0, 0), (75 * scale.x, 75 * scale.y, 725 * scale.x, 425 * scale.y), 4)
-#pygame.draw.rect(screen, (255, 0, 0), (stage_left, stage_top, stage_width, stage_height), 4)
 		pygame.display.flip()
