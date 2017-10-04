@@ -47,7 +47,7 @@ def run():
 
 def keydown(key):
 	global gameover
-	if key == K_f:
+	if key == pygame.K_f:
 		pygame.display.toggle_fullscreen()
-	elif key == K_ESCAPE:
+	elif key == pygame.K_ESCAPE:
 		gameover = True
