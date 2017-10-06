@@ -1,53 +1,67 @@
 import os
-from player import *
 import pygame
+
+from color import *
+from entity import *
 from pygame.locals import *
+from sprite import *
 from vector import *
 
-gameover = False;
+gameover = False
+screen = None
+
+class Game(Entity):
+	def __init__(self, screen, scale):
+		super(Game, self).__init__()
+		self.screen = screen
+
+		# sprites
+		background = pygame.image.load('data/img/background.png')
+		newsize = background.get_rect().size
+		newsize = (int(newsize[0] * scale.x), int(newsize[1] * scale.y))
+		background = pygame.transform.scale(background, newsize)
+		#sprites = pygame.image.load('data/img/sprites.png')
+		#Level.set(sprites)
+
+		# entities
+		self.entities.append(Sprite(background))
+		#self.entities.append(Player(300, 300))
+		#self.entities.append(Level(0))
+
+	def keydown(self, key):
+		if key == pygame.K_f:
+			pygame.display.toggle_fullscreen()
+		elif key == pygame.K_ESCAPE:
+			global gameover
+			gameover = True
+
+	def quit(self):
+		global gameover
+		gameover = True
+
+	def prerender(self):
+		self.screen.fill(BLACK)
+
+	def render(self):
+		pygame.display.flip()
+
 
 def run():
 	global gameover
 
+	# window
 	os.environ['SDL_VIDEO_CENTERED'] = '1'
 	pygame.display.init();
 	info = pygame.display.Info()
 	window_size = (info.current_w / 2, info.current_h / 2)
 	tile_size = Vector(window_size[0] / 32, window_size[1] / 20)
 	screen = pygame.display.set_mode(window_size, DOUBLEBUF)
+	scale = Vector(window_size[0] / 800.0, window_size[1] / 500.0)
+	Sprite.set(screen, scale)
 
+	game = Game(screen, scale)
 	clock = pygame.time.Clock()
 
-	background = pygame.image.load('data/img/background.png')
-	scale = Vector(window_size[0] / 800.0, window_size[1] / 500.0)
-	player = Player(300, 300, scale)
-	background = pygame.transform.scale(background, window_size)
-
 	while not gameover:
-		clock.tick(30)
-
-		# user input
-		for event in pygame.event.get():
-			if event.type == pygame.KEYDOWN:
-				keydown(event.key)
-				player.keydown(event.key)
-			elif event.type == pygame.KEYUP:
-				player.keyup(event.key)
-			elif event.type == pygame.QUIT:
-				gameover = True
-		
-		# update
-		player.update()
-
-		# render
-
-		screen.blit(background, (0, 0));
-		player.render(screen)
-		pygame.display.flip()
-
-def keydown(key):
-	global gameover
-	if key == pygame.K_f:
-		pygame.display.toggle_fullscreen()
-	elif key == pygame.K_ESCAPE:
-		gameover = True
+		clock.tick(60)
+		game.tick(pygame.event.get())

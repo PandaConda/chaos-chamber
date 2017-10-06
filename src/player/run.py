@@ -24,14 +24,28 @@ def exit(player):
 
 def keydown(player, key):
 	if   key == pygame.K_LEFT:
-		player.start_moving_left()
+		if player.vel.x > 0:
+			player.set_state('turn')
+		#player.start_moving_left()
 	elif key == pygame.K_RIGHT:
-		player.start_moving_right()
+		if player.vel.x < 0:
+			player.set_state('turn')
+		#player.start_moving_right()
+	elif key == pygame.K_DOWN:
+		player.set_state('crawl')
 	elif key == pygame.K_LSHIFT:
 		player.set_state('jump')
 
 def keyup(player, key):
 	if   key == pygame.K_LEFT:
-		player.stop_moving_left()
+		if player.moving['right']:
+			player.set_state('turn')
+		else:
+			player.set_state('stand')
+		#player.stop_moving_left()
 	elif key == pygame.K_RIGHT:
-		player.stop_moving_right()
+		#player.stop_moving_right()
+		if player.moving['left']:
+			player.set_state('turn')
+		else:
+			player.set_state('stand')

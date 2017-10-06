@@ -1,7 +1,14 @@
 import pygame
 
 def enter(player):
-	pass
+	if player.moving['left']:
+		player.vel.x = -3
+		player.acc.x = 0
+	elif player.moving['right']:
+		player.vel.x = 3
+		player.acc.x = 0
+	else:
+		player.set_state('crouch')
 
 def update(player):
 	pass
@@ -19,4 +26,9 @@ def keyup(player, key):
 	elif key == pygame.K_RIGHT:
 		player.set_state('crouch')
 	elif key == pygame.K_DOWN:
-		player.set_state('run')
+		if player.moving['left']:
+			player.start_moving_left()
+		elif player.moving['right']:
+			player.start_moving_right()
+		else:
+			player.set_state('crouch')
