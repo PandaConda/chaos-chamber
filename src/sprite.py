@@ -1,7 +1,6 @@
 import pygame
 
 from entity import *
-from frame import *
 from vector import *
 
 class Sprite(Entity):

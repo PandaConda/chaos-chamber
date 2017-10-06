@@ -2,5 +2,5 @@
 import sys
 sys.path.insert(0, 'src')
 sys.path.insert(1, 'src/player')
-import main 
-main.run()
+import game 
+game.run()
