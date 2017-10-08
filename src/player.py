@@ -1,9 +1,10 @@
 import pygame
+from entity import *
 from sprite import *
 from state import *
 from vector import *
 
-# player state functions
+# player state functions (in player/*)
 import climb
 import crawl
 import crouch
@@ -14,18 +15,38 @@ import land
 import roll
 import run
 import stand
+import turn
 
-class Player:
-	def __init__(self, x, y, scale):
+class Player(Sprite):
+
+	state = {
+		'climb' : State(climb , Sprite('player/climb.png' , 1)),
+		'crawl' : State(crawl , Sprite('player/crawl.png' , 1)),
+		'crouch': State(crouch, Sprite('player/crouch.png', 1)),
+		'dead'  : State(stand , Sprite('player/dead.png'  , 1)), # TODO
+		'fall'  : State(fall  , Sprite('player/fall.png'  , 1)),
+		'hang'  : State(hang  , Sprite('player/hang.png'  , 1)),
+		'hurt'  : State(stand , Sprite('player/hurt.png'  , 1)), # TODO
+		'jump'  : State(jump  , Sprite('player/jump.png'  , 1)),
+		'land'  : State(land  , Sprite('player/land.png'  , 1)),
+		'lean'  : State(stand , Sprite('player/lean.png'  , 1)), # TODO
+		'roll'  : State(roll  , Sprite('player/roll.png'  , 1)),
+		'run'   : State(run   , Sprite('player/run.png'   , 1)),
+		'stand' : State(stand , Sprite('player/stand.png' , 1)),
+		'turn'  : State(turn  , Sprite('player/turn.png'  , 1))
+	}
+
+	def __init__(self, x, y, screen, scale):
 		self.max_vel = Vector(8 * scale.x, 16 * scale.y)
 		self.pos = Vector(x * scale.x, y * scale.y)
+		self.spawn = self.pos
 		self.vel = Vector(0, -10)
 		self.acc = Vector(0, 0)
 		self.min = Vector(75 * scale.x, 75 * scale.y)
 		self.max = Vector(725 * scale.x, 425 * scale.y)
 		self.state = Player.state['fall']
 		self.state.enter(self)
-		print 'fall'
+		print '[player] fall'
 		size = self.state.sprite.get_size()
 		self.size = Vector(size[0], size[1])
 		self.scale = scale
@@ -46,7 +67,7 @@ class Player:
 	def set_state(self, name):
 		state = Player.state[name]
 		if state != self.state:
-			print name
+			print '[player] ' + name
 			self.state.exit(self)
 			self.state = state
 			self.state.enter(self)
@@ -153,20 +174,3 @@ class Player:
 			self.moving['jump'] = False
 
 		self.state.keyup(self, key)
-
-	state = {
-		'climb' : State(climb , Sprite('player/climb.png' , 1)),
-		'crawl' : State(crawl , Sprite('player/crawl.png' , 1)),
-		'crouch': State(crouch, Sprite('player/crouch.png', 1)),
-		'dead'  : State(stand , Sprite('player/dead.png'  , 1)),
-		'fall'  : State(fall  , Sprite('player/fall.png'  , 1)),
-		'hang'  : State(hang  , Sprite('player/hang.png'  , 1)),
-		'hurt'  : State(stand , Sprite('player/hurt.png'  , 1)),
-		'jump'  : State(jump  , Sprite('player/jump.png'  , 1)),
-		'land'  : State(land  , Sprite('player/land.png'  , 1)),
-		'lean'  : State(stand , Sprite('player/lean.png'  , 1)),
-		'roll'  : State(roll  , Sprite('player/roll.png'  , 1)),
-		'run'   : State(run   , Sprite('player/run.png'   , 1)),
-		'stand' : State(stand , Sprite('player/stand.png' , 1)),
-		'turn'  : State(run   , Sprite('player/turn.png'  , 1))
-	}
