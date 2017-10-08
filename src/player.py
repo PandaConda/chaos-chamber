@@ -19,24 +19,42 @@ import turn
 
 class Player(Sprite):
 
-	state = {
-		'climb' : State(climb , Sprite('player/climb.png' , 1)),
-		'crawl' : State(crawl , Sprite('player/crawl.png' , 1)),
-		'crouch': State(crouch, Sprite('player/crouch.png', 1)),
-		'dead'  : State(stand , Sprite('player/dead.png'  , 1)), # TODO
-		'fall'  : State(fall  , Sprite('player/fall.png'  , 1)),
-		'hang'  : State(hang  , Sprite('player/hang.png'  , 1)),
-		'hurt'  : State(stand , Sprite('player/hurt.png'  , 1)), # TODO
-		'jump'  : State(jump  , Sprite('player/jump.png'  , 1)),
-		'land'  : State(land  , Sprite('player/land.png'  , 1)),
-		'lean'  : State(stand , Sprite('player/lean.png'  , 1)), # TODO
-		'roll'  : State(roll  , Sprite('player/roll.png'  , 1)),
-		'run'   : State(run   , Sprite('player/run.png'   , 1)),
-		'stand' : State(stand , Sprite('player/stand.png' , 1)),
-		'turn'  : State(turn  , Sprite('player/turn.png'  , 1))
-	}
+	@staticmethod
+	def loadStates():
+		climb_image  = pygame.image.load('data/img/player/climb.png' )
+		crawl_image  = pygame.image.load('data/img/player/crawl.png' )
+		crouch_image = pygame.image.load('data/img/player/crouch.png')
+		dead_image   = pygame.image.load('data/img/player/dead.png'  )
+		fall_image   = pygame.image.load('data/img/player/fall.png'  )
+		hang_image   = pygame.image.load('data/img/player/hang.png'  )
+		hurt_image   = pygame.image.load('data/img/player/hurt.png'  )
+		jump_image   = pygame.image.load('data/img/player/jump.png'  )
+		land_image   = pygame.image.load('data/img/player/land.png'  )
+		lean_image   = pygame.image.load('data/img/player/lean.png'  )
+		roll_image   = pygame.image.load('data/img/player/roll.png'  )
+		run_image    = pygame.image.load('data/img/player/run.png'   )
+		stand_image  = pygame.image.load('data/img/player/stand.png' )
+		turn_image   = pygame.image.load('data/img/player/turn.png'  )
+
+		Player.states = {
+			'climb' : State(climb , Sprite(climb_image , Vector(0, 0))),
+			'crawl' : State(crawl , Sprite(crawl_image , Vector(0, 0))),
+			'crouch': State(crouch, Sprite(crouch_image, Vector(0, 0))),
+			'dead'  : State(stand , Sprite(dead_image  , Vector(0, 0))), # TODO
+			'fall'  : State(fall  , Sprite(fall_image  , Vector(0, 0))),
+			'hang'  : State(hang  , Sprite(hang_image  , Vector(0, 0))),
+			'hurt'  : State(stand , Sprite(hurt_image  , Vector(0, 0))), # TODO
+			'jump'  : State(jump  , Sprite(jump_image  , Vector(0, 0))),
+			'land'  : State(land  , Sprite(land_image  , Vector(0, 0))),
+			'lean'  : State(stand , Sprite(lean_image  , Vector(0, 0))), # TODO
+			'roll'  : State(roll  , Sprite(roll_image  , Vector(0, 0))),
+			'run'   : State(run   , Sprite(run_image   , Vector(0, 0))),
+			'stand' : State(stand , Sprite(stand_image , Vector(0, 0))),
+			'turn'  : State(turn  , Sprite(turn_image  , Vector(0, 0)))
+		}
 
 	def __init__(self, x, y, screen, scale):
+		self.entities = []
 		self.max_vel = Vector(8 * scale.x, 16 * scale.y)
 		self.pos = Vector(x * scale.x, y * scale.y)
 		self.spawn = self.pos
@@ -44,7 +62,9 @@ class Player(Sprite):
 		self.acc = Vector(0, 0)
 		self.min = Vector(75 * scale.x, 75 * scale.y)
 		self.max = Vector(725 * scale.x, 425 * scale.y)
-		self.state = Player.state['fall']
+		for state in Player.states:
+			Player.states[state].sprite.pos = self.pos
+		self.state = Player.states['fall']
 		self.state.enter(self)
 		print '[player] fall'
 		size = self.state.sprite.get_size()
@@ -64,8 +84,14 @@ class Player(Sprite):
 			'jump' : False
 		}
 
+	def set_level(level):
+		self.level = level
+
+	def set_tiles(tiles):
+		self.tiles = tiles
+
 	def set_state(self, name):
-		state = Player.state[name]
+		state = Player.states[name]
 		if state != self.state:
 			print '[player] ' + name
 			self.state.exit(self)
@@ -73,12 +99,10 @@ class Player(Sprite):
 			self.state.enter(self)
 
 	def update(self):
-		self.state.update(self)
-
-		# TODO account for dtime to fix ghosting
-
 		# update x position
 		self.pos.x += self.vel.x * self.scale.x
+		self.state.pos = self.pos
+
 		if self.vel.x < -self.max_vel.x:
 			self.vel.x = -self.max_vel.x
 			if self.acc.x < 0:
@@ -103,9 +127,10 @@ class Player(Sprite):
 		else:
 			self.vel.y += self.acc.y * self.scale.y
 
+		self.state.update(self)
 
-	def render(self, screen):
-		self.state.sprite.render(screen, self.pos.list())
+	def render(self):
+		self.state.sprite.render()
 
 	def start_moving_left(self):
 		self.moving['left'] = True

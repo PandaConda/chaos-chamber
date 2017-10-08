@@ -6,6 +6,7 @@ from color import *
 from entity import *
 from level0 import *
 from move import *
+from player import *
 from pygame.locals import *
 from sprite import *
 from tile import *
@@ -33,7 +34,7 @@ class Game(Entity):
 		# entities
 		self.entities.append(Sprite(background, Vector(screensize[0] / 2, screensize[1] / 2)))
 		self.entities.append(self.levels[self.current_level])
-		#self.entities.append(Player(300, 300))
+		self.entities.append(Player(75, 50, screen, scale))
 
 	def keydown(self, key):
 		if key == pygame.K_f:
@@ -68,6 +69,7 @@ def run():
 
 	Sprite.set(screen, scale)
 	Level.loadSprites((window_size[0] / 16 + 5, window_size[1] / 10))
+	Player.loadStates()
 
 	game = Game(screen, scale)
 	clock = pygame.time.Clock()

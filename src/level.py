@@ -3,6 +3,7 @@ from entity import *
 class Level(Entity):
 	@staticmethod
 	def loadSprites(size):
+		invisible = pygame.image.load('data/img/Level/Invisible.png')
 		top = pygame.image.load('data/img/Level/BottomAndTopTile.png')
 		top = pygame.transform.scale(top, size)
 		bottom = top
@@ -14,6 +15,7 @@ class Level(Entity):
 		hole = pygame.transform.scale(hole, size)
 
 		Level.tiles = {
+			'invisible': invisible,
 			'top': top,
 			'bottom': bottom,
 			'left': left,

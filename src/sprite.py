@@ -32,6 +32,9 @@ class Sprite(Entity):
 		for i in xrange(num_frames):
 			self.frames.append((x_offset * i, 0, self.size.x, self.size.y))
 
+	def get_size(self):
+		return self.image.get_size()
+
 	def render(self):
 		self.screen.blit(self.image,
 				(self.pos.x - (self.size.x / 2), self.pos.y - (self.size.y / 2)),
