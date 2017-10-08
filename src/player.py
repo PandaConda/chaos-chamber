@@ -39,6 +39,7 @@ class Player(Sprite):
 	def __init__(self, x, y, screen, scale):
 		self.max_vel = Vector(8 * scale.x, 16 * scale.y)
 		self.pos = Vector(x * scale.x, y * scale.y)
+		self.spawn = self.pos
 		self.vel = Vector(0, -10)
 		self.acc = Vector(0, 0)
 		self.min = Vector(75 * scale.x, 75 * scale.y)

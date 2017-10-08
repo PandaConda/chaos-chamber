@@ -1,32 +1,65 @@
-class Tile:
-	# TODO make set and map static class vars
+from move import *
+from sprite import *
 
-	@staticmethod
-	def load_set():
-		return pygame.image.load("img/tileset.png")
+class Tile(Sprite):
 
-	@staticmethod
-	def load_map():
-		return {
-			'middle'     : Tile((  0, 0), (50, 50), 0, 1),
-			'topleft'    : Tile(( 50, 0), (75, 75), 0, 1),
-			'topright'   : Tile((125, 0), (75, 75), 0, 1),
-			'bottomleft' : Tile((200, 0), (75, 75), 0, 1),
-			'bottomright': Tile((275, 0), (75, 75), 0, 1),
-			'top'        : Tile((350, 0), (50, 75), 0, 1),
-			'bottom'     : Tile((425, 0), (50, 75), 0, 1),
-			'left'       : Tile((500, 0), (75, 50), 0, 1),
-			'right'      : Tile((550, 0), (75, 50), 0, 1)
-		}
+	def __init__(self, sprite, pos, x_offset = 0, solid = True, moves = [], reverse = False):
+		size = Vector(Sprite.screen.get_width() / 16, Sprite.screen.get_height() / 10)
 
-	def __init__(self, (pos), (size), start_frame, num_frames):
-		self.size = size
-		self.frame = start_frame % num_frames
-		# TODO use map function or something similar to do in 1 loc
-		self.frames = []
-		for i in xrange(num_frames):
-			self.frames.append((pos.x + size.x * i, pos.y, pos.x + size.x * (i + 1), pos.y + size.y))
+		pos.x = pos.x * size.x + (size.x / 2)
+		pos.y = pos.y * size.y + (size.y / 2)
 
-	def render(self, screen, tileset, pos):
-		screen.blit(tileset, pos, this.frames[frame])
-		frame = (frame + 1) % self.num_frames
+		super(Tile, self).__init__(sprite, pos)
+
+		self.solid = solid
+		self.reverse = reverse
+		self.reversing = False
+		self.moving = len(moves) > 0
+
+		if self.moving:
+			self.moveframe = 0
+			self.moves = []
+			if self.reverse:
+				self.moves.append(Move(pos.x, pos.y, 0))
+				self.current_move = 1
+			else:
+				self.current_move = 0
+
+			for move in moves:
+				move.x = move.x * size.x + (size.x / 2)
+				move.y = move.y * size.y + (size.y / 2)
+				self.moves.append(move)
+
+			dst = self.moves[self.current_move]
+			self.dir = Vector((dst.x - self.pos.x) / dst.t, (dst.y - self.pos.y) / dst.t)
+
+
+	def update(self):
+		if self.moving:
+			self.moveframe += 1
+			self.pos.x += self.dir.x
+			self.pos.y += self.dir.y
+			if self.moveframe == self.moves[self.current_move].t:
+				self.moveframe = 0
+				if self.reversing and self.current_move > 0:
+					self.current_move -= 1
+				elif self.current_move < len(self.moves) - 1:
+					self.current_move += 1
+				if self.current_move == 0 and self.reversing:
+					self.current_move = 1
+					self.reversing = False
+				elif self.current_move == len(self.moves) - 1:
+					if self.reverse and not self.reversing:
+						self.reversing = True
+					else:
+						self.moving = false
+						return
+					
+				dst = self.moves[self.current_move]
+				if self.reversing:
+					dst_x = self.moves[self.current_move - 1].x
+					dst_y = self.moves[self.current_move - 1].y
+				else:
+					dst_x = dst.x
+					dst_y = dst.y
+				self.dir = Vector((dst_x - self.pos.x) / dst.t, (dst_y - self.pos.y) / dst.t)
