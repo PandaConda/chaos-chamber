@@ -1,2 +1,4 @@
 *.pyc
 mockups/
+*.swp
+.DS_Store
