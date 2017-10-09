@@ -1,3 +1,4 @@
+from enemy import *
 from level import *
 from tile import *
 from vector import *
@@ -81,6 +82,8 @@ class Level0(Level):
 			Tile(Level.tiles['right'], Vector(15, 9), True),
 		]
 
-		enemies = []
+		enemies = [
+			Enemy(Vector(500, 450)),
+		]
 
 		super(Level0, self).__init__(spawn, goal, tiles, enemies)

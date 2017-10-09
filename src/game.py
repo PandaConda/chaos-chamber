@@ -70,6 +70,7 @@ def run():
 	scale = Vector(window_size[0] / 800.0, window_size[1] / 500.0)
 
 	Sprite.set(screen, scale)
+	Enemy.loadStates()
 	Level.loadSprites((window_size[0] / 16 + 5, window_size[1] / 10))
 	Player.loadStates()
 

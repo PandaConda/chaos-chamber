@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import sys
 sys.path.insert(0, 'src')
-sys.path.insert(1, 'src/level')
-sys.path.insert(2, 'src/player')
+sys.path.insert(1, 'src/enemy')
+sys.path.insert(2, 'src/level')
+sys.path.insert(3, 'src/player')
 import game 
 game.run()

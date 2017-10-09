@@ -41,4 +41,4 @@ class Level(Entity):
 		for tile in self.tiles:
 			tile.render()
 		for enemy in self.enemies:
-			enemy.update()
+			enemy.render()

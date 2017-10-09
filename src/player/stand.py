@@ -40,3 +40,5 @@ def collide(player, entity, type, dir):
 				player.pos.x += 4
 		elif dir == 'bottom':
 			player.pos.y -= 2
+	elif type == 'enemy':
+		player.set_state('dead')
