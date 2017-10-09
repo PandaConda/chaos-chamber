@@ -22,10 +22,6 @@ def keydown(player, key):
 		player.acc.y = 1
 	elif key == pygame.K_DOWN:
 		player.acc.y = -1
-	elif key == pygame.K_LEFT:
-		player.set_state('hang')
-	elif key == pygame.K_RIGHT:
-		player.set_state('hang')
 	elif key == pygame.K_LSHIFT:
 		player.set_state('jump')
 
@@ -36,3 +32,14 @@ def keyup(player, key):
 	elif key == pygame.K_DOWN:
 		player.vel.y = 0
 		player.acc.y = 0
+
+def collide(player, entity, type, dir):
+	if type == 'tile':
+		if dir == 'left':
+			player.pos.x += 1
+		elif dir == 'right':
+			player.pos.x -= 1
+		elif dir == 'top':
+			player.set_state('jump')
+		elif dir == 'bottom':
+			player.set_state('stand')

@@ -30,11 +30,13 @@ class Game(Entity):
 			Level0()
 		]
 		self.current_level = 0
+		self.player = Player(self.levels[self.current_level].spawn, screen, scale)
+		self.player.set_level(self.levels[self.current_level])
 
 		# entities
 		self.entities.append(Sprite(background, Vector(screensize[0] / 2, screensize[1] / 2)))
 		self.entities.append(self.levels[self.current_level])
-		self.entities.append(Player(75, 50, screen, scale))
+		self.entities.append(self.player)
 
 	def keydown(self, key):
 		if key == pygame.K_f:

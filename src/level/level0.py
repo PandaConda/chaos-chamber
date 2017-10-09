@@ -5,7 +5,7 @@ from vector import *
 class Level0(Level):
 	def __init__(self):
 
-		start = Vector(5, 5)
+		spawn = Vector(300, 300)
 
 		goal = Vector(9, 5)
 
@@ -83,4 +83,4 @@ class Level0(Level):
 
 		enemies = []
 
-		super(Level0, self).__init__(start, goal, tiles, enemies)
+		super(Level0, self).__init__(spawn, goal, tiles, enemies)

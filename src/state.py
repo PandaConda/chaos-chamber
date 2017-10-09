@@ -5,4 +5,5 @@ class State:
 		self.exit = state.exit
 		self.keydown = state.keydown
 		self.keyup = state.keyup
+		self.collide = state.collide
 		self.sprite = sprite

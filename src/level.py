@@ -23,16 +23,13 @@ class Level(Entity):
 			'hole': hole
 		}
 
-	def __init__(self, start, goal, tiles, enemies):
+	def __init__(self, spawn, goal, tiles, enemies):
 		self.super = super(Level, self)
 		super(Level, self).__init__()
-		self.start = start
+		self.spawn = spawn
 		self.goal = goal
 		self.tiles = tiles
 		self.enemies = enemies
-
-	def start(self, player):
-		player.spawn = self.start
 
 	def update(self):
 		for tile in self.tiles:

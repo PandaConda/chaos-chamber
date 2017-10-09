@@ -2,12 +2,17 @@ import pygame
 
 def enter(player):
 	player.vel.y = 0
+	player.shoot_cooldown = 20
 
 def update(player):
-	# TODO move to collide method
-	left   = player.pos.x
-	right  = left + player.size.x
-
+	player.shoot_cooldown -= 1
+	if player.shoot_cooldown == 0:
+		if player.vel.x == 0:
+			player.set_state('stand')
+		else:
+			player.set_state('run')
+		return
+			
 def exit(player):
 	pass
 
@@ -22,8 +27,6 @@ def keydown(player, key):
 		player.start_moving_right()
 	elif key == pygame.K_LSHIFT:
 		player.set_state('jump')
-	elif key == pygame.K_SPACE:
-		player.set_state('shoot')
 
 def keyup(player, key):
 	if   key == pygame.K_LEFT:
@@ -38,14 +41,4 @@ def keyup(player, key):
 			player.set_state('stand')
 
 def collide(player, entity, type, dir):
-	if type == 'tile':
-		if dir == 'left':
-			player.pos.x += 4
-			player.vel.x = 0
-			player.set_state('stand')
-		elif dir == 'right':
-			player.pos.x -= 4
-			player.vel.x = 0
-			player.set_state('stand')
-		elif dir == 'bottom':
-			player.pos.y -= 2
+	pass

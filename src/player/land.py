@@ -8,7 +8,7 @@ def enter(player):
 	elif player.moving['left'] or player.moving['right']:
 		player.set_state('run')
 	else:
-		player.set_state('roll')
+		player.set_state('stand')
 
 def update(player):
 	pass
@@ -21,3 +21,8 @@ def keydown(player, key):
 
 def keyup(player, key):
 	pass
+
+def collide(player, entity, type, dir):
+	if type == 'tile':
+		if dir == 'bottom':
+			player.pos.x -= 1

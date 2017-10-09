@@ -2,32 +2,13 @@ import pygame
 
 def enter(player):
 	player.airborne = True
-	if player.vel.y == 0 and player.acc.y == 0:
+	if player.vel.y == 0:
+		print 'test'
+		player.vel.y = -1
 		player.acc.y = -1
 
 def update(player):
-	# TODO move to collide method
-	left   = player.pos.x
-	right  = left + player.size.x
-	top    = player.pos.y
-	bottom = top + player.size.y
-
-	if bottom >= player.max.y:
-		player.airborne = False
-		player.pos.y = player.max.y - player.size.y
-		player.vel.y = 0
-		player.acc.y = 0
-		player.set_state('land')
-	elif left < player.min.x:
-		player.pos.x = player.min.x
-		player.vel.x = 0
-		player.acc.x = 0
-		player.set_state('climb')
-	elif right > player.max.x:
-		player.pos.x = player.max.x - player.size.x 
-		player.vel.x = 0
-		player.acc.x = 0
-		player.set_state('climb')
+	pass
 
 def exit(player):
 	pass
@@ -42,3 +23,17 @@ def keydown(player, key):
 
 def keyup(player, key):
 	pass
+
+def collide(player, entity, type, dir):
+	if type == 'tile':
+		print 'tile collision: ' + dir
+		if dir == 'bottom':
+			player.airborne = False
+			player.pos.x -= 2
+			player.vel.y = 0
+			player.acc.y = 0
+			player.set_state('land')
+		elif dir == 'left' or dir == 'right':
+			player.vel.x = 0
+			player.acc.x = 0
+			player.set_state('climb')	

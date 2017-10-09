@@ -21,6 +21,22 @@ def keydown(player, key):
 		player.set_state('crouch')
 	elif key == pygame.K_LSHIFT:
 		player.set_state('jump')
+	elif key == pygame.K_SPACE:
+		player.set_state('shoot')
 
 def keyup(player, key):
 	pass
+
+def collide(player, entity, type, dir):
+	if type == 'tile':
+		if dir == 'left':
+			player.pos.x += 1
+		elif dir == 'right':
+			player.pos.x -= 1
+		elif dir == 'top':
+			if player.facing_right:
+				player.pos.x -= 4
+			else:
+				player.pos.x += 4
+		elif dir == 'bottom':
+			player.pos.y -= 2
