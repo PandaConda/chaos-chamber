@@ -43,3 +43,5 @@ def collide(player, entity, type, dir):
 			player.set_state('jump')
 		elif dir == 'bottom':
 			player.set_state('stand')
+	elif type == 'enemy':
+		player.set_state('dead')

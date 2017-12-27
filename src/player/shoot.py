@@ -41,4 +41,5 @@ def keyup(player, key):
 			player.set_state('stand')
 
 def collide(player, entity, type, dir):
-	pass
+	if type == 'enemy':
+		player.set_state('dead')

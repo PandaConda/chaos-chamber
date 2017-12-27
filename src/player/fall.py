@@ -37,3 +37,5 @@ def collide(player, entity, type, dir):
 			player.vel.x = 0
 			player.acc.x = 0
 			player.set_state('climb')	
+	elif type == 'enemy':
+		player.set_state('dead')

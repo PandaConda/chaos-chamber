@@ -24,4 +24,6 @@ def keyup(player, key):
 	pass
 
 def collide(player, entity, type, dir):
-	pass
+	if type == 'enemy':
+		print 'player killed by enemy'
+		player.set_state('dead')

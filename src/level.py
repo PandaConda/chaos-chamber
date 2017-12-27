@@ -29,6 +29,8 @@ class Level(Entity):
 		self.spawn = spawn
 		self.goal = goal
 		self.tiles = tiles
+		for enemy in enemies:
+			enemy.set_level(self)
 		self.enemies = enemies
 
 	def update(self):

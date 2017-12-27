@@ -1,5 +1,6 @@
 def enter(enemy):
-	enemy.vel.x = 0
+	enemy.facing_right = True
+	enemy.vel.x = 1
 	enemy.vel.y = 0
 	enemy.acc.x = 0
 	enemy.acc.y = 0
@@ -16,5 +17,6 @@ def keydown():
 def keyup():
 	pass
 
-def collide():
-	pass
+def collide(self, entity, type, dir):
+	if type == "tile" and dir == "right":
+		self.set_state("run_left")

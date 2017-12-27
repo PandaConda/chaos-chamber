@@ -62,6 +62,7 @@ class Player(Sprite):
 		}
 
 	def __init__(self, pos, screen, scale):
+		self.screen = screen # TODO remove
 		self.entities = []
 		self.max_vel = Vector(8 * scale.x, 16 * scale.y)
 		self.pos = Vector(pos.x * scale.x, pos.y * scale.y)
@@ -114,10 +115,10 @@ class Player(Sprite):
 		w = size[0] / self.state.sprite.num_frames / 2
 		h = size[1] / 2
 
-		left   = self.pos.x - w
-		right  = self.pos.x + w
-		top    = self.pos.y - h
-		bottom = self.pos.y + h
+		left   = self.pos.x - w 
+		right  = self.pos.x + w 
+		top    = self.pos.y - h 
+		bottom = self.pos.y + h 
 
 		for tile in self.level.tiles:
 			if tile.solid:
@@ -159,6 +160,47 @@ class Player(Sprite):
 						dir = 'bottom'
 					self.state.collide(self, tile, 'tile', dir)
 					break
+
+		for enemy in self.level.enemies:
+			enemy_size = enemy.get_size()
+			enemy_left   = enemy.pos.x - enemy_size.x / 2 
+			enemy_right  = enemy.pos.x + enemy_size.x / 2 
+			enemy_top    = enemy.pos.y - enemy_size.y / 2 
+			enemy_bottom = enemy.pos.y + enemy_size.y / 2 + 8
+
+			l = left >= enemy_left and left <= enemy_right
+			r = right >= enemy_left and right <= enemy_right
+			t = top >= enemy_top and top <= enemy_bottom
+			b = bottom >= enemy_top and bottom <= enemy_bottom
+
+			if t and l:
+				if enemy_right - left < enemy_bottom - top:
+					dir = 'left'
+				else:
+					dir = 'top'
+				self.state.collide(self, enemy, 'enemy', dir)
+				break
+			elif t and r:
+				if right - enemy_left < enemy_bottom - top:
+					dir = 'right'
+				else:
+					dir = 'top'
+				self.state.collide(self, enemy, 'enemy', dir)
+				break
+			elif b and l:
+				if enemy_right - left < bottom - enemy_top:
+					dir = 'left'
+				else:
+					dir = 'bottom'
+				self.state.collide(self, enemy, 'enemy', dir)
+				break
+			elif b and r:
+				if right - enemy_left < bottom - enemy_top:
+					dir = 'right'
+				else:
+					dir = 'bottom'
+				self.state.collide(self, enemy, 'enemy', dir)
+				break
 
 		self.pos.x += self.vel.x * self.scale.x
 		self.pos.y -= self.vel.y * self.scale.y
