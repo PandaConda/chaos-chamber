@@ -3,7 +3,6 @@ import pygame
 def enter(player):
 	player.airborne = True
 	if player.vel.y == 0:
-		print 'test'
 		player.vel.y = -1
 		player.acc.y = -1
 
