@@ -92,6 +92,7 @@ class Player(Sprite):
 		}
 
 		self.facing_right = False
+		self.shoot_cooldown = 0
 
 	def set_level(self, level):
 		self.level = level
@@ -212,6 +213,9 @@ class Player(Sprite):
 
 		if self.pos.x < 0 or self.pos.x > 800 * Sprite.scale.x or self.pos.y < 0 or self.pos.y > 500 * Sprite.scale.y:
 			self.set_state('dead')
+
+		if self.shoot_cooldown > 0:
+			self.shoot_cooldown -= 1
 
 	def render(self):
 		self.state.sprite.render(self.facing_right)

@@ -22,7 +22,8 @@ def keydown(player, key):
 	elif key == pygame.K_LSHIFT:
 		player.set_state('jump')
 	elif key == pygame.K_SPACE:
-		player.set_state('shoot')
+		if player.shoot_cooldown == 0:
+			player.set_state('shoot')
 
 def keyup(player, key):
 	pass

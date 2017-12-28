@@ -1,11 +1,12 @@
 def enter(enemy):
-	enemy.vel.x = 0
-	enemy.vel.y = 0
-	enemy.acc.x = 0
-	enemy.acc.y = 0
+	enemy.vel.x *= -0.5
+	enemy.dead_cooldown = 60
 
 def update(enemy):
-	pass
+	enemy.dead_cooldown -= 1
+	if enemy.dead_cooldown == 0:
+		enemy.respawn()
+		enemy.set_state('run_left')
 
 def exit(enemy):
 	pass
@@ -16,5 +17,5 @@ def keydown():
 def keyup():
 	pass
 
-def collide():
+def collide(self, entity, type, dir):
 	pass

@@ -12,14 +12,13 @@ def enter(player):
 def update(player):
 	player.dead_cooldown -= 1
 	if player.dead_cooldown == 0:
-		spawn = player.level.spawn
-		player.pos.x = spawn.x
-		player.pos.y = spawn.y
-		player.vel.y = 0
 		player.set_state('fall')
 			
 def exit(player):
-	pass
+	spawn = player.level.spawn
+	player.pos.x = spawn.x
+	player.pos.y = spawn.y
+	player.vel.y = 0
 
 def keydown(player, key):
 	pass

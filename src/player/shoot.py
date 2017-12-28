@@ -1,17 +1,16 @@
 import pygame
+from bullet import *
 
 def enter(player):
-	player.vel.y = 0
 	player.shoot_cooldown = 20
+	player.entities.append(Bullet(player))
 
 def update(player):
-	player.shoot_cooldown -= 1
 	if player.shoot_cooldown == 0:
 		if player.vel.x == 0:
 			player.set_state('stand')
 		else:
 			player.set_state('run')
-		return
 			
 def exit(player):
 	pass

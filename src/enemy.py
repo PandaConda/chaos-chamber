@@ -40,7 +40,7 @@ class Enemy(Sprite):
 		self.pos = spawn
 		self.vel = Vector(0, 0)
 		self.acc = Vector(0, 0)
-		self.spawn = spawn
+		self.spawn = Vector(spawn.x, spawn.y)
 		self.state = self.states['run_left']
 		for state in self.states:
 			self.states[state].sprite.pos = self.pos
@@ -58,7 +58,6 @@ class Enemy(Sprite):
 		return Vector(w, h)
 
 	def update(self):
-
 		size = self.state.sprite.get_size()
 		w = size[0] / self.state.sprite.num_frames / 2
 		h = size[1] / 2
@@ -117,7 +116,6 @@ class Enemy(Sprite):
 		self.state.pos = self.pos
 		self.state.update(self)
 
-
 	def render(self):
 		self.state.sprite.render(self.facing_right)
 
@@ -126,7 +124,8 @@ class Enemy(Sprite):
 			self.set_state('dead')
 
 	def respawn(self):
-		self.pos = self.spawn
+		self.pos.x = self.spawn.x
+		self.pos.y = self.spawn.y
 		self.set_state('run_left')
 	
 	def set_state(self, name):
