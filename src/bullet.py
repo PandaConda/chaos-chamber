@@ -28,6 +28,22 @@ class Bullet(Entity):
 		top    = self.pos.y - self.radius
 		bottom = self.pos.y + self.radius
 
+		for tile in self.parent.level.tiles:
+			tile_left   = tile.pos.x - tile.size.x / 2
+			tile_right  = tile.pos.x + tile.size.x / 2
+			tile_top    = tile.pos.y - tile.size.y / 2
+			tile_bottom = tile.pos.y + tile.size.y / 2
+
+			l = left >= tile_left and left <= tile_right
+			r = right >= tile_left and right <= tile_right
+			t = top >= tile_top and top <= tile_bottom
+			b = bottom >= tile_top and bottom <= tile_bottom
+			
+			if (l or r) and (t or b):
+				self.parent.entities.remove(self)
+				break
+
+
 		for enemy in self.parent.level.enemies:
 			enemy_size   = enemy.get_size()
 			enemy_left   = enemy.pos.x - enemy_size.x / 2
